@@ -44,12 +44,22 @@ class p1(GameSprite):
         window.blit(self.image,(self.rect.x,self.rect.y))
 
 class ball(GameSprite):
+    dx = 1
+    dy = 5
     def update(self):
-        pass
+        if self.dx == 1:
+            self.rect.x += self.speed
+        else:
+            self.rect.x -= self.speed
+        
+        if self.dy == 5:
+            self.rect.y += self.speed
+        else:
+            self.rect.y -= self.speed
 
 # Создание персонажей
-P2 = p2("pl2.png", 30, 30, 5,30,150)
-P1 = p1("pl2.png", 1030, 30, 5,30,150)
+P2 = p2("pl2.png", 30, 375, 5,30,150)
+P1 = p1("pl2.png", 1030, 375, 5,30,150)
 myach = ball("ball.png",540,375,4,40,40)
 # Переменные игрового цикла
 game = True
@@ -73,6 +83,36 @@ while game:
         if e.type == QUIT:
             game = False
 
+    if sprite.collide_rect(P1,myach):
+        myach.dx = 2
+
+    if sprite.collide_rect(P2,myach):
+        myach.dx = 1 
+
+    if sprite.collide_rect(P2,myach) or sprite.collide_rect(P1,myach):
+        myach.speed += 0.2
+
+    if myach.rect.y >= 710:
+        myach.dy = 10
+
+    if myach.rect.y <= 0:
+        myach.dy = 5    
+
+    if myach.rect.x > 1030:
+        Finish = False 
+
+    if myach.rect.x < 0:
+        Finish = False
+
+    if e.key == K_r:
+        P1.empty()
+        P2.empty()
+        myach.empty()
+
+
+
+
+
     window.blit(bg, (0,0))
     P1.update()
     P2.update()
@@ -80,4 +120,6 @@ while game:
     P1.reset()
     P2.reset()
     myach.reset()
+
+    
     display.update()
